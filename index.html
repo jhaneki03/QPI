@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QPI | Quiz Performance Improvement</title>
+
+    <!-- Connect CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Connect Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a8a">
+</head>
+
+<body>
+
+    <!-- Main App Container -->
+    <main class="app-container">
+
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <h1>QPI</h1>
+                <span>Quiz Performance Improvement</span>
+            </div>
+        </header>
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+
+            <h2>Welcome to QPI!</h2>
+
+            <p>
+                A digital learning tool designed to help Grade 11 students
+                improve their quiz performance and strengthen learning retention.
+            </p>
+
+            <!-- Student Information -->
+ <!-- Student Information -->
+<div class="student-form">
+
+    <label for="studentName">Student Name</label>
+
+    <input 
+        type="text" 
+        id="studentName" 
+        placeholder="Enter your name" 
+        autocomplete="off"
+    >
+
+    <label for="studentSection">Section</label>
+
+    <select id="studentSection">
+        <option value="">Select your section</option>
+
+        <option value="Aphrodite">Grade 11 - Aphrodite</option>
+        <option value="Apollo">Grade 11 - Apollo</option>
+        <option value="Demeter">Grade 11 - Demeter</option>
+        <option value="Athena">Grade 11 - Athena</option>
+        <option value="Hades">Grade 11 - Hades</option>
+        <option value="Hermes">Grade 11 - Hermes</option>
+        <option value="Artemis">Grade 11 - Artemis</option>
+        <option value="Zeus">Grade 11 - Zeus</option>
+        <option value="Poseidon">Grade 11 - Poseidon</option>
+        <option value="Eros">Grade 11 - Eros</option>
+        <option value="Hera">Grade 11 - Hera</option>
+        <option value="Ares">Grade 11 - Ares</option>
+    </select>
+
+    </div>
+
+            <!-- Start Button -->
+            <button id="startQuizBtn" class="primary-btn">
+                Start Quiz
+            </button>
+
+        </section>
+
+        <!-- Features -->
+        <section class="features-section">
+
+            <h2>How QPI Helps You</h2>
+
+            <div class="features">
+
+                <div class="feature-card">
+                    <h3>Take a Quiz</h3>
+                    <p>
+                        Test your understanding of the lesson through
+                        short quizzes.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Review Mistakes</h3>
+                    <p>
+                        Identify questions you answered incorrectly
+                        and review the related topics.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Try Again</h3>
+                    <p>
+                        Retake quizzes to practice retrieving
+                        information from memory.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Track Progress</h3>
+                    <p>
+                        Monitor your quiz performance and learning
+                        progress over time.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript -->
+    <!-- IMPORTANT: questions.js must come BEFORE app.js -->
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>

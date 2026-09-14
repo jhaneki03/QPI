@@ -1,0 +1,264 @@
+/* ========================================
+   QPI - QUIZ PERFORMANCE IMPROVEMENT
+   Main Stylesheet
+======================================== */
+
+/* ---------- RESET ---------- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ---------- BODY ---------- */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+
+/* ---------- APP CONTAINER ---------- */
+
+.app-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+/* ---------- HEADER ---------- */
+
+.app-header {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo h1 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 3px;
+}
+
+
+/* ---------- WELCOME SECTION ---------- */
+
+.welcome-section {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+}
+
+.welcome-section h2 {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.welcome-section > p {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+
+/* ---------- STUDENT FORM ---------- */
+
+.student-form {
+    max-width: 500px;
+    margin: 0 auto 25px;
+
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.student-form label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+.student-form input,
+.student-form select {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    background: #ffffff;
+    transition: 0.2s ease;
+}
+
+.student-form input:focus,
+.student-form select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* ---------- PRIMARY BUTTON ---------- */
+
+.primary-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ---------- FEATURES SECTION ---------- */
+
+.features-section {
+    margin-bottom: 30px;
+}
+
+.features-section h2 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+
+/* ---------- FEATURE CARDS ---------- */
+
+.feature-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px 20px;
+    text-align: center;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+
+    transition: 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
+}
+
+.feature-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 850px) {
+
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .welcome-section {
+        padding: 30px;
+    }
+
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 550px) {
+
+    .app-container {
+        padding: 12px;
+    }
+
+    .app-header {
+        padding: 16px 18px;
+    }
+
+    .logo h1 {
+        font-size: 30px;
+    }
+
+    .logo span {
+        font-size: 12px;
+    }
+
+    .welcome-section {
+        padding: 25px 18px;
+        border-radius: 16px;
+    }
+
+    .welcome-section h2 {
+        font-size: 26px;
+    }
+
+    .welcome-section > p {
+        font-size: 14px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+
+    .primary-btn {
+        width: 100%;
+    }
+}
