@@ -7,12 +7,23 @@
 /* ---------- APP STATE ---------- */
 
 const appState = {
+
     studentName: "",
+
     studentSection: "",
-    currentQuiz: 0,
+
+    lessonLink: "",
+
+    questions: [],
+
+    currentQuestion: 0,
+
     score: 0,
+
     answers: [],
+
     quizHistory: []
+
 };
 
 
@@ -20,67 +31,170 @@ const appState = {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const studentNameInput = document.getElementById("studentName");
-    const studentSectionInput = document.getElementById("studentSection");
-    const startQuizBtn = document.getElementById("startQuizBtn");
+    const studentNameInput =
+        document.getElementById("studentName");
 
-    /* Check if Start Quiz button exists */
+    const studentSectionInput =
+        document.getElementById("studentSection");
 
-    if (!startQuizBtn) {
-        console.error("ERROR: startQuizBtn was not found.");
-        return;
-    }
+    const lessonLinkInput =
+        document.getElementById("lessonLink");
 
-    /* Start Quiz */
+    const generateQuizBtn =
+        document.getElementById("generateQuizBtn");
 
-    startQuizBtn.addEventListener("click", function () {
 
-        const studentName = studentNameInput.value.trim();
-        const studentSection = studentSectionInput.value;
+    if (!generateQuizBtn) {
 
-        /* Check Name */
-
-        if (studentName === "") {
-            alert("Please enter your name.");
-            studentNameInput.focus();
-            return;
-        }
-
-        /* Check Section */
-
-        if (studentSection === "") {
-            alert("Please select your section.");
-            studentSectionInput.focus();
-            return;
-        }
-
-        /* Save student information */
-
-        appState.studentName = studentName;
-        appState.studentSection = studentSection;
-
-        localStorage.setItem(
-            "qpiStudent",
-            JSON.stringify({
-                name: studentName,
-                section: studentSection
-            })
+        console.error(
+            "ERROR: generateQuizBtn was not found."
         );
 
-        /* Reset quiz */
+        return;
 
-        appState.currentQuiz = 0;
-        appState.score = 0;
-        appState.answers = [];
-
-        /* Show quiz */
-
-        showQuizPage();
-
-    });
+    }
 
 
-    /* Load saved student */
+    /* ---------- GENERATE QUIZ ---------- */
+
+    generateQuizBtn.addEventListener(
+        "click",
+        function () {
+
+            const studentName =
+                studentNameInput.value.trim();
+
+            const studentSection =
+                studentSectionInput.value;
+
+            const lessonLink =
+                lessonLinkInput.value.trim();
+
+
+            /* CHECK NAME */
+
+            if (studentName === "") {
+
+                alert(
+                    "Please enter your name."
+                );
+
+                studentNameInput.focus();
+
+                return;
+
+            }
+
+
+            /* CHECK SECTION */
+
+            if (studentSection === "") {
+
+                alert(
+                    "Please select your section."
+                );
+
+                studentSectionInput.focus();
+
+                return;
+
+            }
+
+
+            /* CHECK LESSON LINK */
+
+            if (lessonLink === "") {
+
+                alert(
+                    "Please paste your lesson link."
+                );
+
+                lessonLinkInput.focus();
+
+                return;
+
+            }
+
+
+            /* SAVE STUDENT */
+
+            appState.studentName =
+                studentName;
+
+            appState.studentSection =
+                studentSection;
+
+            appState.lessonLink =
+                lessonLink;
+
+
+            localStorage.setItem(
+                "qpiStudent",
+                JSON.stringify({
+
+                    name: studentName,
+
+                    section: studentSection
+
+                })
+            );
+
+
+            /*
+
+                IMPORTANT:
+
+                For now, questions.js provides
+                the question bank.
+
+                Later, we will connect this
+                button to an AI backend that
+                reads the lesson link and
+                generates the questions.
+            */
+
+            if (
+                typeof sampleQuestions ===
+                    "undefined" ||
+                !Array.isArray(sampleQuestions)
+            ) {
+
+                alert(
+                    "Question bank could not be loaded. Please check questions.js."
+                );
+
+                return;
+
+            }
+
+
+            /* GET 10 RANDOM QUESTIONS */
+
+            appState.questions =
+                getRandomQuestions(
+                    sampleQuestions,
+                    10
+                );
+
+
+            /* RESET QUIZ */
+
+            appState.currentQuestion = 0;
+
+            appState.score = 0;
+
+            appState.answers = [];
+
+
+            /* SHOW QUIZ */
+
+            showQuizPage();
+
+        }
+    );
+
+
+    /* LOAD SAVED STUDENT */
 
     loadStudent(
         studentNameInput,
@@ -90,51 +204,130 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-/* ---------- SHOW QUIZ PAGE ---------- */
+/* ========================================
+   RANDOM QUESTIONS
+======================================== */
+
+function getRandomQuestions(
+    questions,
+    amount
+) {
+
+    const shuffled =
+        [...questions];
+
+    /* Fisher-Yates Shuffle */
+
+    for (
+        let i = shuffled.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            shuffled[i],
+            shuffled[j]
+        ] =
+        [
+            shuffled[j],
+            shuffled[i]
+        ];
+
+    }
+
+
+    /* Return requested number */
+
+    return shuffled.slice(
+        0,
+        Math.min(
+            amount,
+            shuffled.length
+        )
+    );
+
+}
+
+
+/* ========================================
+   SHOW QUIZ PAGE
+======================================== */
 
 function showQuizPage() {
 
     const appContainer =
-        document.querySelector(".app-container");
+        document.querySelector(
+            ".app-container"
+        );
+
 
     if (!appContainer) {
-        console.error("ERROR: .app-container was not found.");
+
         return;
+
     }
 
-    /* Hide welcome and features */
+
+    /* HIDE HOME */
 
     const welcomeSection =
-        document.querySelector(".welcome-section");
+        document.querySelector(
+            ".welcome-section"
+        );
 
     const featuresSection =
-        document.querySelector(".features-section");
+        document.querySelector(
+            ".features-section"
+        );
+
 
     if (welcomeSection) {
-        welcomeSection.style.display = "none";
+
+        welcomeSection.style.display =
+            "none";
+
     }
+
 
     if (featuresSection) {
-        featuresSection.style.display = "none";
+
+        featuresSection.style.display =
+            "none";
+
     }
 
 
-    /* Remove old quiz section */
+    /* REMOVE OLD QUIZ */
 
     const oldQuiz =
-        document.querySelector(".quiz-section");
+        document.querySelector(
+            ".quiz-section"
+        );
+
 
     if (oldQuiz) {
+
         oldQuiz.remove();
+
     }
 
 
-    /* Create quiz section */
+    /* CREATE QUIZ */
 
     const quizSection =
-        document.createElement("section");
+        document.createElement(
+            "section"
+        );
 
-    quizSection.className = "quiz-section";
+
+    quizSection.className =
+        "quiz-section";
+
 
     quizSection.innerHTML = `
 
@@ -147,181 +340,199 @@ function showQuizPage() {
                 <p>
                     Student:
                     <strong>
-                        ${escapeHTML(appState.studentName)}
+                        ${escapeHTML(
+                            appState.studentName
+                        )}
                     </strong>
                 </p>
 
                 <p>
                     Section:
                     <strong>
-                        ${escapeHTML(appState.studentSection)}
+                        ${escapeHTML(
+                            appState.studentSection
+                        )}
                     </strong>
                 </p>
 
             </div>
 
 
-            <div id="quizContent">
-
-                <h3>Ready to Begin?</h3>
-
-                <p>
-                    Answer each question carefully.
-                    Your results will help track your
-                    quiz performance and learning retention.
-                </p>
-
-                <button
-                    id="beginQuizBtn"
-                    class="primary-btn"
-                >
-                    Begin Quiz
-                </button>
-
-            </div>
+            <div id="quizContent"></div>
 
         </div>
 
     `;
 
 
-    appContainer.appendChild(quizSection);
+    appContainer.appendChild(
+        quizSection
+    );
 
 
-    /* Begin Quiz button */
-
-    const beginQuizBtn =
-        document.getElementById("beginQuizBtn");
-
-    if (beginQuizBtn) {
-
-        beginQuizBtn.addEventListener(
-            "click",
-            beginQuiz
-        );
-
-    }
+    beginQuiz();
 
 }
 
 
-/* ---------- BEGIN QUIZ ---------- */
+/* ========================================
+   BEGIN QUIZ
+======================================== */
 
 function beginQuiz() {
 
-    appState.currentQuiz = 0;
+    appState.currentQuestion = 0;
+
     appState.score = 0;
+
     appState.answers = [];
+
 
     loadQuestion();
 
 }
 
 
-/* ---------- LOAD QUESTION ---------- */
+/* ========================================
+   LOAD QUESTION
+======================================== */
 
 function loadQuestion() {
 
     const quizContent =
-        document.getElementById("quizContent");
+        document.getElementById(
+            "quizContent"
+        );
+
 
     if (!quizContent) {
-        console.error("ERROR: quizContent was not found.");
+
         return;
+
     }
 
 
-    /* Make sure questions.js loaded */
+    const questions =
+        appState.questions;
+
 
     if (
-        typeof sampleQuestions === "undefined" ||
-        !Array.isArray(sampleQuestions) ||
-        sampleQuestions.length === 0
+        !questions ||
+        questions.length === 0
     ) {
 
         quizContent.innerHTML = `
 
             <div class="result-container">
 
-                <h2>Question Error</h2>
+                <h2>No Questions</h2>
 
                 <p>
-                    No questions were found.
-                </p>
-
-                <p>
-                    Please check your questions.js file.
+                    No quiz questions were found.
                 </p>
 
             </div>
 
         `;
 
-        console.error(
-            "ERROR: sampleQuestions was not found. Check questions.js."
-        );
-
         return;
+
     }
 
 
-    /* Get current question */
+    /* FINISH */
+
+    if (
+        appState.currentQuestion >=
+        questions.length
+    ) {
+
+        finishQuiz();
+
+        return;
+
+    }
+
 
     const question =
-        sampleQuestions[appState.currentQuiz];
+        questions[
+            appState.currentQuestion
+        ];
 
 
-    /* Finish quiz */
-
-    if (!question) {
-        finishQuiz();
-        return;
-    }
-
-
-    /* Display question */
+    /* DISPLAY QUESTION */
 
     quizContent.innerHTML = `
 
         <div class="question-container">
 
-            <p class="question-number">
+            <div class="progress-info">
 
                 Question
-                ${appState.currentQuiz + 1}
+                ${appState.currentQuestion + 1}
                 of
-                ${sampleQuestions.length}
+                ${questions.length}
 
-            </p>
+            </div>
+
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    style="width:
+                    ${
+                        (
+                            (
+                                appState.currentQuestion
+                                /
+                                questions.length
+                            ) * 100
+                        )
+                    }%"
+                ></div>
+
+            </div>
 
 
             <h3 class="question-text">
 
-                ${escapeHTML(question.question)}
+                ${escapeHTML(
+                    question.question
+                )}
 
             </h3>
 
 
             <div class="choices">
 
-                ${question.choices.map(
-                    function (choice, index) {
+                ${
+                    question.choices
+                        .map(
+                            function (
+                                choice,
+                                index
+                            ) {
 
-                        return `
+                                return `
 
-                            <button
-                                class="choice-btn"
-                                data-index="${index}"
-                            >
+                                    <button
+                                        class="choice-btn"
+                                        data-index="${index}"
+                                    >
 
-                                ${escapeHTML(choice)}
+                                        ${escapeHTML(
+                                            choice
+                                        )}
 
-                            </button>
+                                    </button>
 
-                        `;
+                                `;
 
-                    }
-                ).join("")}
+                            }
+                        )
+                        .join("")
+                }
 
             </div>
 
@@ -330,105 +541,313 @@ function loadQuestion() {
     `;
 
 
-    /* Add answer buttons */
+    /* ADD CHOICE EVENTS */
 
     document
-        .querySelectorAll(".choice-btn")
-        .forEach(function (button) {
+        .querySelectorAll(
+            ".choice-btn"
+        )
+        .forEach(
+            function (button) {
 
-            button.addEventListener(
-                "click",
-                function () {
+                button.addEventListener(
+                    "click",
+                    function () {
 
-                    selectAnswer(
-                        Number(button.dataset.index)
-                    );
+                        selectAnswer(
+                            Number(
+                                button.dataset.index
+                            )
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 }
 
 
-/* ---------- SELECT ANSWER ---------- */
+/* ========================================
+   SELECT ANSWER
+======================================== */
 
-function selectAnswer(selectedAnswer) {
+function selectAnswer(
+    selectedAnswer
+) {
 
     const question =
-        sampleQuestions[appState.currentQuiz];
+        appState.questions[
+            appState.currentQuestion
+        ];
 
 
     if (!question) {
+
         return;
+
     }
 
 
     const isCorrect =
-        selectedAnswer === question.answer;
+        selectedAnswer ===
+        question.answer;
 
 
-    /* Save answer */
+    /* SAVE ANSWER */
 
     appState.answers.push({
 
-        question: question.question,
+        question:
+            question.question,
 
-        selectedAnswer: selectedAnswer,
+        choices:
+            question.choices,
 
-        correctAnswer: question.answer,
+        selectedAnswer:
+            selectedAnswer,
 
-        isCorrect: isCorrect
+        correctAnswer:
+            question.answer,
+
+        explanation:
+            question.explanation ||
+            "Review the lesson to strengthen your understanding.",
+
+        isCorrect:
+            isCorrect
 
     });
 
 
-    /* Update score */
+    /* UPDATE SCORE */
 
     if (isCorrect) {
+
         appState.score++;
+
     }
 
 
-    /* Move to next question */
+    /* SHOW FEEDBACK */
 
-    appState.currentQuiz++;
-
-
-    /* Load next question */
-
-    loadQuestion();
+    showAnswerFeedback(
+        question,
+        selectedAnswer,
+        isCorrect
+    );
 
 }
 
 
-/* ---------- FINISH QUIZ ---------- */
+/* ========================================
+   SHOW ANSWER FEEDBACK
+======================================== */
+
+function showAnswerFeedback(
+    question,
+    selectedAnswer,
+    isCorrect
+) {
+
+    const quizContent =
+        document.getElementById(
+            "quizContent"
+        );
+
+
+    if (!quizContent) {
+
+        return;
+
+    }
+
+
+    const selectedText =
+        question.choices[
+            selectedAnswer
+        ];
+
+
+    const correctText =
+        question.choices[
+            question.answer
+        ];
+
+
+    if (isCorrect) {
+
+        quizContent.innerHTML = `
+
+            <div class="feedback correct-feedback">
+
+                <div class="feedback-icon">
+                    ✓
+                </div>
+
+                <h2>Correct!</h2>
+
+                <p>
+                    Great job! Your answer is correct.
+                </p>
+
+                <div class="answer-box">
+
+                    <strong>
+                        Your Answer:
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(
+                            selectedText
+                        )}
+                    </p>
+
+                </div>
+
+                <button
+                    id="nextQuestionBtn"
+                    class="primary-btn"
+                >
+                    Next Question
+                </button>
+
+            </div>
+
+        `;
+
+    } else {
+
+        quizContent.innerHTML = `
+
+            <div class="feedback wrong-feedback">
+
+                <div class="feedback-icon">
+                    ✕
+                </div>
+
+                <h2>Incorrect</h2>
+
+                <div class="answer-box">
+
+                    <strong>
+                        Your Answer:
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(
+                            selectedText
+                        )}
+                    </p>
+
+                </div>
+
+
+                <div class="correct-answer-box">
+
+                    <strong>
+                        Correct Answer:
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(
+                            correctText
+                        )}
+                    </p>
+
+                </div>
+
+
+                <div class="explanation-box">
+
+                    <strong>
+                        Explanation:
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(
+                            question.explanation ||
+                            "Review this topic again to strengthen your understanding."
+                        )}
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="nextQuestionBtn"
+                    class="primary-btn"
+                >
+                    Next Question
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+
+    const nextButton =
+        document.getElementById(
+            "nextQuestionBtn"
+        );
+
+
+    if (nextButton) {
+
+        nextButton.addEventListener(
+            "click",
+            function () {
+
+                appState.currentQuestion++;
+
+                loadQuestion();
+
+            }
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   FINISH QUIZ
+======================================== */
 
 function finishQuiz() {
 
     const quizContent =
-        document.getElementById("quizContent");
+        document.getElementById(
+            "quizContent"
+        );
 
 
     if (!quizContent) {
+
         return;
+
     }
 
 
     const totalQuestions =
-        sampleQuestions.length;
+        appState.questions.length;
 
 
     const percentage =
         totalQuestions > 0
             ? Math.round(
-                (appState.score / totalQuestions) * 100
+                (
+                    appState.score /
+                    totalQuestions
+                ) * 100
             )
             : 0;
 
 
-    /* Save result */
+    /* SAVE RESULT */
 
     saveQuizResult();
 
@@ -437,261 +856,94 @@ function finishQuiz() {
 
         <div class="result-container">
 
-            <h2>Quiz Completed!</h2>
-
-            <p class="result-score">
-
-                ${appState.score}
-                /
-                ${totalQuestions}
-
-            </p>
-
-            <p>
-                Score:
-                <strong>${percentage}%</strong>
-            </p>
-
-
-            <button
-                id="reviewMistakesBtn"
-                class="primary-btn"
-            >
-
-                Review Mistakes
-
-            </button>
-
-
-            <button
-                id="homeBtn"
-                class="primary-btn"
-            >
-
-                Return Home
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    /* Review mistakes */
-
-    const reviewButton =
-        document.getElementById(
-            "reviewMistakesBtn"
-        );
-
-    if (reviewButton) {
-
-        reviewButton.addEventListener(
-            "click",
-            reviewMistakes
-        );
-
-    }
-
-
-    /* Return home */
-
-    const homeButton =
-        document.getElementById("homeBtn");
-
-    if (homeButton) {
-
-        homeButton.addEventListener(
-            "click",
-            function () {
-
-                location.reload();
-
-            }
-        );
-
-    }
-
-}
-
-
-/* ---------- SAVE QUIZ RESULT ---------- */
-
-function saveQuizResult() {
-
-    const previousHistory =
-        JSON.parse(
-            localStorage.getItem("qpiHistory")
-        ) || [];
-
-
-    const total =
-        sampleQuestions.length;
-
-
-    const percentage =
-        total > 0
-            ? Math.round(
-                (appState.score / total) * 100
-            )
-            : 0;
-
-
-    const result = {
-
-        student: appState.studentName,
-
-        section: appState.studentSection,
-
-        score: appState.score,
-
-        total: total,
-
-        percentage: percentage,
-
-        date: new Date().toLocaleString()
-
-    };
-
-
-    previousHistory.push(result);
-
-
-    localStorage.setItem(
-        "qpiHistory",
-        JSON.stringify(previousHistory)
-    );
-
-}
-
-
-/* ---------- REVIEW MISTAKES ---------- */
-
-function reviewMistakes() {
-
-    const quizContent =
-        document.getElementById("quizContent");
-
-
-    if (!quizContent) {
-        return;
-    }
-
-
-    const mistakes =
-        appState.answers.filter(
-            function (answer) {
-
-                return !answer.isCorrect;
-
-            }
-        );
-
-
-    /* No mistakes */
-
-    if (mistakes.length === 0) {
-
-        quizContent.innerHTML = `
-
-            <div class="result-container">
-
-                <h2>Excellent Work!</h2>
+            <div class="result-icon">
+                🎯
+            </div>
+
+            <h2>
+                Quiz Completed!
+            </h2>
+
+            <div class="score-card">
+
+                <span>
+                    Your Score
+                </span>
+
+                <strong>
+                    ${appState.score}
+                    /
+                    ${totalQuestions}
+                </strong>
 
                 <p>
-                    You answered all questions correctly.
+                    ${percentage}%
                 </p>
 
+            </div>
+
+
+            <div class="result-buttons">
+
                 <button
-                    id="returnHomeBtn"
+                    id="reviewMistakesBtn"
                     class="primary-btn"
                 >
+                    Review Mistakes
+                </button>
 
+
+                <button
+                    id="retakeQuizBtn"
+                    class="secondary-btn"
+                >
+                    Retake Quiz
+                </button>
+
+
+                <button
+                    id="homeBtn"
+                    class="secondary-btn"
+                >
                     Return Home
-
                 </button>
 
             </div>
 
-        `;
-
-
-        document
-            .getElementById("returnHomeBtn")
-            .addEventListener(
-                "click",
-                function () {
-
-                    location.reload();
-
-                }
-            );
-
-        return;
-
-    }
-
-
-    /* Show mistakes */
-
-    quizContent.innerHTML = `
-
-        <div class="mistakes-container">
-
-            <h2>Review Your Mistakes</h2>
-
-            <p>
-                Review the questions you missed
-                before taking another quiz.
-            </p>
-
-
-            <div class="mistake-list">
-
-                ${mistakes.map(
-                    function (mistake, index) {
-
-                        return `
-
-                            <div class="mistake-card">
-
-                                <h3>
-                                    Mistake ${index + 1}
-                                </h3>
-
-                                <p>
-                                    ${escapeHTML(
-                                        mistake.question
-                                    )}
-                                </p>
-
-                            </div>
-
-                        `;
-
-                    }
-                ).join("")}
-
-            </div>
-
-
-            <button
-                id="returnHomeMistakeBtn"
-                class="primary-btn"
-            >
-
-                Return Home
-
-            </button>
-
         </div>
 
     `;
 
 
+    /* REVIEW */
+
     document
         .getElementById(
-            "returnHomeMistakeBtn"
+            "reviewMistakesBtn"
+        )
+        .addEventListener(
+            "click",
+            reviewMistakes
+        );
+
+
+    /* RETAKE */
+
+    document
+        .getElementById(
+            "retakeQuizBtn"
+        )
+        .addEventListener(
+            "click",
+            retakeQuiz
+        );
+
+
+    /* HOME */
+
+    document
+        .getElementById(
+            "homeBtn"
         )
         .addEventListener(
             "click",
@@ -705,21 +957,336 @@ function reviewMistakes() {
 }
 
 
-/* ---------- HTML SECURITY ---------- */
+/* ========================================
+   REVIEW MISTAKES
+======================================== */
 
-function escapeHTML(text) {
+function reviewMistakes() {
 
-    const div =
-        document.createElement("div");
+    const quizContent =
+        document.getElementById(
+            "quizContent"
+        );
 
-    div.textContent = text;
 
-    return div.innerHTML;
+    if (!quizContent) {
+
+        return;
+
+    }
+
+
+    const mistakes =
+        appState.answers.filter(
+            function (answer) {
+
+                return !answer.isCorrect;
+
+            }
+        );
+
+
+    /* NO MISTAKES */
+
+    if (mistakes.length === 0) {
+
+        quizContent.innerHTML = `
+
+            <div class="result-container">
+
+                <div class="result-icon">
+                    🏆
+                </div>
+
+                <h2>
+                    Excellent Work!
+                </h2>
+
+                <p>
+                    You answered all questions correctly.
+                </p>
+
+                <button
+                    id="returnHomeBtn"
+                    class="primary-btn"
+                >
+                    Return Home
+                </button>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById(
+                "returnHomeBtn"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    location.reload();
+
+                }
+            );
+
+
+        return;
+
+    }
+
+
+    /* SHOW ALL MISTAKES */
+
+    quizContent.innerHTML = `
+
+        <div class="mistakes-container">
+
+            <h2>
+                Review Your Mistakes
+            </h2>
+
+            <p class="review-intro">
+                Study the correct answers and explanations
+                before taking the quiz again.
+            </p>
+
+
+            <div class="mistake-list">
+
+                ${
+                    mistakes
+                        .map(
+                            function (
+                                mistake,
+                                index
+                            ) {
+
+                                return `
+
+                                    <div class="mistake-card">
+
+                                        <span class="mistake-number">
+                                            Mistake ${index + 1}
+                                        </span>
+
+
+                                        <h3>
+                                            ${escapeHTML(
+                                                mistake.question
+                                            )}
+                                        </h3>
+
+
+                                        <div class="answer-box">
+
+                                            <strong>
+                                                Your Answer:
+                                            </strong>
+
+                                            <p>
+                                                ${escapeHTML(
+                                                    mistake.choices[
+                                                        mistake.selectedAnswer
+                                                    ]
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div class="correct-answer-box">
+
+                                            <strong>
+                                                Correct Answer:
+                                            </strong>
+
+                                            <p>
+                                                ${escapeHTML(
+                                                    mistake.choices[
+                                                        mistake.correctAnswer
+                                                    ]
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div class="explanation-box">
+
+                                            <strong>
+                                                Why?
+                                            </strong>
+
+                                            <p>
+                                                ${escapeHTML(
+                                                    mistake.explanation
+                                                )}
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                `;
+
+                            }
+                        )
+                        .join("")
+                }
+
+            </div>
+
+
+            <div class="result-buttons">
+
+                <button
+                    id="reviewRetakeBtn"
+                    class="primary-btn"
+                >
+                    Retake Quiz
+                </button>
+
+
+                <button
+                    id="reviewHomeBtn"
+                    class="secondary-btn"
+                >
+                    Return Home
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById(
+            "reviewRetakeBtn"
+        )
+        .addEventListener(
+            "click",
+            retakeQuiz
+        );
+
+
+    document
+        .getElementById(
+            "reviewHomeBtn"
+        )
+        .addEventListener(
+            "click",
+            function () {
+
+                location.reload();
+
+            }
+        );
 
 }
 
 
-/* ---------- LOAD SAVED STUDENT ---------- */
+/* ========================================
+   RETAKE QUIZ
+======================================== */
+
+function retakeQuiz() {
+
+    appState.questions =
+        getRandomQuestions(
+            appState.questions,
+            appState.questions.length
+        );
+
+
+    appState.currentQuestion = 0;
+
+    appState.score = 0;
+
+    appState.answers = [];
+
+
+    loadQuestion();
+
+}
+
+
+/* ========================================
+   SAVE QUIZ RESULT
+======================================== */
+
+function saveQuizResult() {
+
+    const previousHistory =
+        JSON.parse(
+            localStorage.getItem(
+                "qpiHistory"
+            )
+        ) || [];
+
+
+    const total =
+        appState.questions.length;
+
+
+    const percentage =
+        total > 0
+            ? Math.round(
+                (
+                    appState.score /
+                    total
+                ) * 100
+            )
+            : 0;
+
+
+    const result = {
+
+        student:
+            appState.studentName,
+
+        section:
+            appState.studentSection,
+
+        lessonLink:
+            appState.lessonLink,
+
+        score:
+            appState.score,
+
+        total:
+            total,
+
+        percentage:
+            percentage,
+
+        date:
+            new Date().toLocaleString()
+
+    };
+
+
+    previousHistory.push(
+        result
+    );
+
+
+    localStorage.setItem(
+        "qpiHistory",
+        JSON.stringify(
+            previousHistory
+        )
+    );
+
+}
+
+
+/* ========================================
+   LOAD SAVED STUDENT
+======================================== */
 
 function loadStudent(
     studentNameInput,
@@ -728,12 +1295,16 @@ function loadStudent(
 
     const savedStudent =
         JSON.parse(
-            localStorage.getItem("qpiStudent")
+            localStorage.getItem(
+                "qpiStudent"
+            )
         );
 
 
     if (!savedStudent) {
+
         return;
+
     }
 
 
@@ -751,5 +1322,26 @@ function loadStudent(
             savedStudent.section || "";
 
     }
+
+}
+
+
+/* ========================================
+   HTML SECURITY
+======================================== */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        String(text);
+
+
+    return div.innerHTML;
 
 }
