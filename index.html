@@ -7,22 +7,17 @@
 
     <title>QPI | Quiz Performance Improvement</title>
 
-    <!-- Connect CSS -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- Connect Manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Theme Color -->
     <meta name="theme-color" content="#1e3a8a">
 </head>
 
 <body>
 
-    <!-- Main App Container -->
     <main class="app-container">
 
-        <!-- Header -->
+        <!-- HEADER -->
         <header class="app-header">
             <div class="logo">
                 <h1>QPI</h1>
@@ -30,58 +25,128 @@
             </div>
         </header>
 
-        <!-- Welcome Section -->
-        <section class="welcome-section">
+
+        <!-- HOME -->
+        <section class="welcome-section" id="homeSection">
 
             <h2>Welcome to QPI!</h2>
 
             <p>
                 A digital learning tool designed to help Grade 11 students
-                improve their quiz performance and strengthen learning retention.
+                improve quiz performance and strengthen learning retention.
             </p>
 
-            <!-- Student Information -->
- <!-- Student Information -->
-<div class="student-form">
 
-    <label for="studentName">Student Name</label>
+            <!-- STUDENT INFORMATION -->
+            <div class="student-form">
 
-    <input 
-        type="text" 
-        id="studentName" 
-        placeholder="Enter your name" 
-        autocomplete="off"
-    >
+                <label for="studentName">
+                    Student Name
+                </label>
 
-    <label for="studentSection">Section</label>
+                <input
+                    type="text"
+                    id="studentName"
+                    placeholder="Enter your name"
+                    autocomplete="off"
+                >
 
-    <select id="studentSection">
-        <option value="">Select your section</option>
 
-        <option value="Aphrodite">Grade 11 - Aphrodite</option>
-        <option value="Apollo">Grade 11 - Apollo</option>
-        <option value="Demeter">Grade 11 - Demeter</option>
-        <option value="Athena">Grade 11 - Athena</option>
-        <option value="Hades">Grade 11 - Hades</option>
-        <option value="Hermes">Grade 11 - Hermes</option>
-        <option value="Artemis">Grade 11 - Artemis</option>
-        <option value="Zeus">Grade 11 - Zeus</option>
-        <option value="Poseidon">Grade 11 - Poseidon</option>
-        <option value="Eros">Grade 11 - Eros</option>
-        <option value="Hera">Grade 11 - Hera</option>
-        <option value="Ares">Grade 11 - Ares</option>
-    </select>
+                <label for="studentSection">
+                    Section
+                </label>
 
-    </div>
+                <select id="studentSection">
 
-            <!-- Start Button -->
-            <button id="startQuizBtn" class="primary-btn">
-                Start Quiz
+                    <option value="">
+                        Select your section
+                    </option>
+
+                    <option value="Aphrodite">
+                        Grade 11 - Aphrodite
+                    </option>
+
+                    <option value="Apollo">
+                        Grade 11 - Apollo
+                    </option>
+
+                    <option value="Demeter">
+                        Grade 11 - Demeter
+                    </option>
+
+                    <option value="Athena">
+                        Grade 11 - Athena
+                    </option>
+
+                    <option value="Hades">
+                        Grade 11 - Hades
+                    </option>
+
+                    <option value="Hermes">
+                        Grade 11 - Hermes
+                    </option>
+
+                    <option value="Artemis">
+                        Grade 11 - Artemis
+                    </option>
+
+                    <option value="Zeus">
+                        Grade 11 - Zeus
+                    </option>
+
+                    <option value="Poseidon">
+                        Grade 11 - Poseidon
+                    </option>
+
+                    <option value="Eros">
+                        Grade 11 - Eros
+                    </option>
+
+                    <option value="Hera">
+                        Grade 11 - Hera
+                    </option>
+
+                    <option value="Ares">
+                        Grade 11 - Ares
+                    </option>
+
+                </select>
+
+
+                <!-- LESSON LINK -->
+                <label for="lessonLink">
+                    Lesson Link
+                </label>
+
+                <input
+                    type="url"
+                    id="lessonLink"
+                    placeholder="Paste your lesson link here"
+                >
+
+                <small class="input-help">
+                    Paste the link to the lesson you want to study.
+                </small>
+
+            </div>
+
+
+            <!-- GENERATE BUTTON -->
+            <button
+                id="generateQuizBtn"
+                class="primary-btn"
+            >
+                Generate 10 Questions
             </button>
+
+
+            <!-- STATUS -->
+            <div id="generationStatus"></div>
 
         </section>
 
-        <!-- Features -->
+
+        <!-- FEATURES -->
         <section class="features-section">
 
             <h2>How QPI Helps You</h2>
@@ -89,35 +154,50 @@
             <div class="features">
 
                 <div class="feature-card">
-                    <h3>Take a Quiz</h3>
+
+                    <h3>Generate Questions</h3>
+
                     <p>
-                        Test your understanding of the lesson through
-                        short quizzes.
+                        Create a 10-question quiz based on your
+                        selected lesson.
                     </p>
+
                 </div>
 
+
                 <div class="feature-card">
+
                     <h3>Review Mistakes</h3>
+
                     <p>
-                        Identify questions you answered incorrectly
-                        and review the related topics.
+                        See your wrong answers and learn the
+                        correct answers.
                     </p>
+
                 </div>
 
+
                 <div class="feature-card">
+
                     <h3>Try Again</h3>
+
                     <p>
-                        Retake quizzes to practice retrieving
-                        information from memory.
+                        Retake the quiz to practice recalling
+                        the information.
                     </p>
+
                 </div>
 
+
                 <div class="feature-card">
+
                     <h3>Track Progress</h3>
+
                     <p>
-                        Monitor your quiz performance and learning
-                        progress over time.
+                        Monitor your quiz scores and improvement
+                        over time.
                     </p>
+
                 </div>
 
             </div>
@@ -126,10 +206,44 @@
 
     </main>
 
-    <!-- JavaScript -->
-    <!-- IMPORTANT: questions.js must come BEFORE app.js -->
+
+    <!-- QUESTION BANK -->
     <script src="questions.js"></script>
+
+    <!-- MAIN APP -->
     <script src="app.js"></script>
+
+
+    <!-- SERVICE WORKER -->
+    <script>
+
+        if ("serviceWorker" in navigator) {
+
+            window.addEventListener("load", function () {
+
+                navigator.serviceWorker
+                    .register("service-worker.js")
+                    .then(function () {
+
+                        console.log(
+                            "QPI service worker registered."
+                        );
+
+                    })
+                    .catch(function (error) {
+
+                        console.log(
+                            "Service worker registration failed:",
+                            error
+                        );
+
+                    });
+
+            });
+
+        }
+
+    </script>
 
 </body>
 
